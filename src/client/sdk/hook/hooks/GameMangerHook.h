@@ -47,6 +47,7 @@ public:
             break;
         case GameState::GameLoading:
             std::cout << "GameState: GameLoading\n";
+            Client::GetInstance().GetModuleManager().GetModule("Gui")->Disable();
             break;
         case GameState::InGame:
             std::cout << "GameState: InGame\n";

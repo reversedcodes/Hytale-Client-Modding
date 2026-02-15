@@ -13,7 +13,6 @@ void Client::Initialize(HANDLE hModule)
     if (m_initialized)
         return;
 
-
     // Register modules
     m_ModuleManager.RegisterModule(std::make_unique<ImGuiModule>());
     m_ModuleManager.RegisterModule(std::make_unique<EjectModule>());
