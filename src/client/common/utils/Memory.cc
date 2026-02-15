@@ -1,14 +1,10 @@
 #include "Memory.h"
-#include "ProcessHelper.h"
 #include <vector>
 #include <sstream>
 #include <string>
 #include <cstdint>  
-#include <Windows.h>
 
-// No test
-
-namespace mem
+namespace Memory
 {
     static std::vector<int> PatternToBytes(const char* pattern)
     {

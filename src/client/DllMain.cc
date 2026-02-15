@@ -1,9 +1,11 @@
-#include "Client.h"
 #include <iostream>
+#include <thread>
+#include "Runtime.h"
 
 static DWORD WINAPI init(LPVOID hModule)
 {
-    Client::GetInstance().Initialize();
+    Runtime::GetInstance().Init(hModule);
+    Runtime::GetInstance().Start();
     return 0;
 }
 
@@ -16,7 +18,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
     }
     else if (reason == DLL_PROCESS_DETACH)
     {
-        Client::GetInstance().Shutdown();
+        Runtime::GetInstance().Shutdown();
     }
     return TRUE;
 }

@@ -2,6 +2,8 @@
 #include <Windows.h>
 #include <atomic>
 
+#include "module/ModuleManager.h"
+
 class Client
 {
 public:
@@ -11,7 +13,13 @@ public:
         return instance;
     }
 
-    void Initialize();
+    ModuleManager &GetModuleManager()
+    {
+        return m_ModuleManager;
+    }
+
+
+    void Initialize(HANDLE hModule);
     void Shutdown();
 
     bool IsInitialized() const { return m_initialized; }
@@ -20,17 +28,16 @@ public:
     void RequestShutdown() { m_shutdownRequested = true; }
     bool ShutdownRequested() const { return m_shutdownRequested; }
 
-    void OnSwapBuffers(HDC hdc);
-    void OnWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 private:
-    Client() = default;
-    ~Client() = default;
-
+    Client() : m_ModuleManager() {}
+    ~Client() = default;      
     Client(const Client &) = delete;
     Client &operator=(const Client &) = delete;
-
 private:
+
+    ModuleManager m_ModuleManager;
+
+    HANDLE m_hModule = nullptr;
     bool m_initialized = false;
     bool m_running = false;
     std::atomic<bool> m_shutdownRequested = false;

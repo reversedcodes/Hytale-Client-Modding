@@ -2,7 +2,7 @@
 
 #include "ProcessHelper.h"
 
-namespace mem
+namespace Memory
 {
     uintptr_t FindPattern(const char* signature);
 

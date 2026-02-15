@@ -1,31 +1,63 @@
 project(client)
 
 include(FetchContent)
-include(cmake/FetchImgui.cmake)
-include(cmake/FetchFunchook.cmake)
+
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG docking
+)
+FetchContent_MakeAvailable(imgui)
+
+set(IMGUI_DIR ${imgui_SOURCE_DIR})
+
+add_library(imgui STATIC
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_win32.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
+target_include_directories(imgui PUBLIC ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+
+FetchContent_Declare(
+    minhook
+    GIT_REPOSITORY https://github.com/TsudaKageyu/minhook.git
+    GIT_TAG master
+)
+
+FetchContent_MakeAvailable(minhook)
 
 add_library(client SHARED
     Dllmain.cc
-    Hooks.cc
-    Client.cc
+    Runtime.cc
 
-    utils/Console.cc
-    utils/Memory.cc
-    utils/ProcessHelper.cc
+    common/utils/Terminal.cc
+    common/utils/Memory.cc
+    common/utils/ProcessHelper.cc
 
-    sdk/GDI32.cc
+    sdk/abi/GDI32.cc
 
-    modules/ImGuiModule.cc
+    core/Client.cc
+
+    core/module/modules/visual/ImGuiModule.cc
+    core/module/modules/dev/ConsoleModule.cc
+    core/module/modules/settings/EjectModule.cc
 )
 
+target_include_directories(client PRIVATE ../)
 
 target_link_libraries(client PRIVATE
-  funchook-static
-  distorm
-  psapi
-  opengl32
-  gdi32
-  imgui
+    hytale::header
+    psapi
+    opengl32
+    gdi32
+    imgui
+    minhook
 )
 
 target_include_directories(client PRIVATE ./)
+
+target_compile_definitions(client PRIVATE NOMINMAX)

@@ -1,5 +1,5 @@
 #pragma once
-#include "modules/Module.h"
+#include "Module.h"
 
 #include <vector>
 #include <memory>
@@ -8,11 +8,11 @@
 class ModuleManager
 {
 public:
-    static ModuleManager &GetInstance()
-    {
-        static ModuleManager inst;
-        return inst;
-    }
+    ModuleManager() = default;
+    ~ModuleManager() = default;
+
+    ModuleManager(const ModuleManager &) = delete;
+    ModuleManager &operator=(const ModuleManager &) = delete;
 
     void Initialize()
     {
@@ -33,21 +33,7 @@ public:
             if (m->IsEnabled())
                 m->OnUpdate();
     }
-
-    void OnSwapBuffers(HDC hdc)
-    {
-        for (auto &m : m_modules)
-            if (m->IsEnabled())
-                m->OnSwapBuffers(hdc);
-    }
-
-    void OnWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-    {
-        for (auto &m : m_modules)
-            if (m->IsEnabled())
-                m->OnWndProc(hWnd, msg, wParam, lParam);
-    }
-
+    
     void RegisterModule(std::unique_ptr<Module> module)
     {
         m_modules.emplace_back(std::move(module));
@@ -108,11 +94,5 @@ public:
     }
 
 private:
-    ModuleManager() = default;
-    ~ModuleManager() = default;
-
-    ModuleManager(const ModuleManager &) = delete;
-    ModuleManager &operator=(const ModuleManager &) = delete;
-
     std::vector<std::unique_ptr<Module>> m_modules;
 };
