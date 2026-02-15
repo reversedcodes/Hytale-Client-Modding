@@ -62,7 +62,7 @@ To make the native code readable again, we use Ghidra with a specific Native AOT
 It is mandatory to build your mod DLL in **Release** mode for it to work correctly.
 
 * **IDE**: Visual Studio Code with the **CMake Extension**.
-* **Compiler**: MSVC 2024/2026 x64 (Release).
+* **Compiler**: MSVC 2022/2026 x64 (Release).
 * **Usage**: Open the project in VS Code. The CMake extension should detect the project automatically. Simply select the `MSVC x64 Release` kit and build.
 
 ---
